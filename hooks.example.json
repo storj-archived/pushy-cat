@@ -1,0 +1,9 @@
+{
+  "hooks": [
+    {
+      "repository": "bitcumulus",
+      "branch":     "master",
+      "deploy":     "update-bitcumulus.sh"
+    }
+  ]
+}
