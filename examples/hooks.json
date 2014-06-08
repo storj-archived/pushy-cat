@@ -1,0 +1,14 @@
+{
+  "hooks": [
+    {
+      "repository": "pushycat",
+      "branch":     "master",
+      "file":       "bitcumulus.commit"
+    },
+    {
+      "repository": "pushycat",
+      "branch":     "master",
+      "execute":    "/bin/ls > bitcumulus.output"
+    }
+  ]
+}

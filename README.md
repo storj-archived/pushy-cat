@@ -5,54 +5,51 @@ Listens to Github webhooks and executes scripts accordingly.
 
 Use case: automatically update static websites.
 
-#### Installation
+pushycat allows you to configure a webhook listener that does one of the following:
+- run a script
+- write the pushed commit hash to a file
 
-Create a hooks.json similar to the provided hooks.example.json. For example, if
-you want to track the master branch on a repository, so that it automatically
-pulls a local copy, you would set it up like so:
+
+## Installation
+
+```bash
+git clone https://github.com/Storj/pushy-cat.git /your/local/path
+cd /your/local/path
+go build *.go
+```
+
+
+## Configuration
+
+Create a hooks.json similar to the provided `examples/hooks.json`.
+
+Here's a detailed example that contains both the executable and the file commands:
 
 ```json
 {
+  "listen": "0.0.0.0:8080",
   "hooks":[
     {
       "repository": "repository-name",
       "branch":     "master",
-      "deploy":     "/path/to/script.sh"
+      "execute":    "/path/to/script.sh"
+    },
+    {
+      "repository": "other-repository-name",
+      "branch":     "development",
+      "file":       "/path/to/other-repository-name.commit"
     }
   ]
 }
 ```
 
-/path/to/script.sh would contain `cd /path/to/local/repo; git pull` (be sure to
-mark it as executable, with chmod +x /path/to/local/repo).
+This will listen to any github events being sent to
+`your-domain.com/repository-name` and `your-domain.com/other-repository-name`
 
-Then, set up a gunicorn webserver pointing to pushycat:app and add a git
-webhook pointing to your-domain.com/repository-name.
+The executable string will be run as an argument to `bash -c`.
 
-##### Example setup commands
 
-```bash
-git clone https://github.com/Storj/pushy-cat.git
-cd pushy-cat
-virtualenv .env --prompt [pushycat]
-source .env/bin/activate
-pip install -r requirements.txt
-```
+### Daemon setup
 
-You still need to configure hooks.json and any scripts to execute.
-
-#### Gunicorn+supervisord setup
-
-If you have supervisord installed, you can use it to automatically run
-pushycat as a gunicorn daemon, using the following config file:
-
-```ini
-[program:pushycat]
-command=/home/pushycat/pushy-cat/.env/bin/gunicorn -w 2 -b 127.0.0.1:5100 pushycat:app
-directory=/home/pushycat/pushy-cat
-user=pushycat
-
-autostart=true
-autorestart=true
-redirect_stderr=true
-```
+To have pushycat always running, you need to setup upstart, init, or supervisord.
+The `examples` directory contains some sample configurations to get you started.
