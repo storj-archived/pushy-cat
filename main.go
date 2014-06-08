@@ -17,7 +17,5 @@ func main() {
 
   http.ListenAndServe(
     conf.ListenAddress,
-    &GithubHandler{
-      NewPushycat(conf.Hooks)
-    })
+    &GithubHandler{NewPushycat(conf.Hooks)})
 }
