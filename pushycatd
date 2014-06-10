@@ -6,6 +6,7 @@ import pushycat.client
 import os
 import pwd
 import sys
+import argparse
 
 def setup(conf):
     """Configure clients and http listener"""
@@ -41,10 +42,10 @@ def chuser(username):
         os.setuid(uid)
 
 
-def run():
+def run(confpath):
     """Launch webserver and clients, and wait forever"""
 
-    conf = pushycat.config.Config()
+    conf = pushycat.config.Config(confpath)
 
     listener, clients = setup(conf)
 
@@ -62,5 +63,16 @@ def run():
     for i in range(0, 1 + len(clients)):
         os.wait()
 
+
+def main():
+    parser = argparse.ArgumentParser(
+            description='webservice that listens for github webhooks and executes arbitrary commands when triggered.')
+
+    parser.add_argument('--conf', default=pushycat.config.CONFIG_PATH)
+
+    options = parser.parse_args()
+
+    run(options.conf)
+
 if __name__ == "__main__":
-    run()
+    main()

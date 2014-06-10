@@ -2,6 +2,6 @@
   "user": "hugopeixoto",
   "listen": "0.0.0.0:8080",
   "path": "/hook/",
-  "hooks": "hooks.json.example",
+  "hooks": "examples/hooks.json",
   "scripts": "examples/"
 }

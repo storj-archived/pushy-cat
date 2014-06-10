@@ -2,10 +2,10 @@
 import pushycat.config
 import argparse
 
-def add(url, branch, directory, user):
+def add(confpath, url, branch, directory, user):
     """Adds a webhook listener to the configuration file"""
 
-    conf = pushycat.config.Config()
+    conf = pushycat.config.Config(confpath)
 
     conf.add(url, branch, directory, user)
 
@@ -21,9 +21,15 @@ def main():
     parser.add_argument('directory')
     parser.add_argument('user')
     parser.add_argument('--branch', default='master')
+    parser.add_argument('--conf', default=pushycat.config.CONFIG_PATH)
 
     options = parser.parse_args()
-    add(options.url, options.branch, options.directory, options.user)
+    add(
+            options.conf,
+            options.url,
+            options.branch,
+            options.directory,
+            options.user)
 
 if __name__ == "__main__":
     main()
