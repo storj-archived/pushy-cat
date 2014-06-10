@@ -2,11 +2,10 @@
 # -*- makefile -*-
 
 # Uncomment this to turn on verbose mode.
-export DH_VERBOSE=1
-export PYBUILD_NAME=pushycat
+# export DH_VERBOSE=1
 
 %:
-	dh $@ --with python2,python3 --buildsystem=pybuild
+	dh $@
 
 binary-indep: build install
 	dh_testdir
