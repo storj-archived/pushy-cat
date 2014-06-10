@@ -1,5 +1,7 @@
 {
   "user": "hugopeixoto",
   "listen": "0.0.0.0:8080",
-  "hooks": "/etc/pushycat/hooks.json"
+  "path": "/hook/",
+  "hooks": "hooks.json.example",
+  "scripts": "examples/"
 }

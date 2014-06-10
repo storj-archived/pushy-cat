@@ -1,10 +1,8 @@
-{
-  "hooks": [
-    {
-      "user":       "hugopeixoto",
-      "repository": "bitcumulus",
-      "branch":     "master",
-      "run":        "update-bitcumulus.sh"
-    }
-  ]
-}
+[
+  {
+    "branch": "master",
+    "repository": "https://github.com/storj/storj.io",
+    "run": ["examples/create-or-update-git.sh", "../pushycat"],
+    "user": "hugopeixoto"
+  }
+]

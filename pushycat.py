@@ -1,26 +1,20 @@
 #!/usr/bin/env python
 
+import config
 import http
 import client
-import json
 import os
 import pwd
 import sys
 
-def client_notify(client, repo, branch):
-    def f():
-        client.writer.write("{0}/{1}\n".format(repo, branch))
+CONFIG_PATH = "/etc/pushycat/config.json"
+CONFIG_PATH = "config.json.example"
 
-    return f
-
-
-def setup(config):
-    hooks = load_json_file(config["hooks"])
-
+def setup(conf):
     clients = {}
-    listener = http.HttpListener(config["listen"])
+    listener = http.HttpListener(conf.listen(), conf.path())
 
-    for hook in hooks["hooks"]:
+    for hook in conf.hooks():
         user       = hook["user"]
         repository = hook["repository"]
         branch     = hook["branch"]
@@ -34,7 +28,7 @@ def setup(config):
         listener.add(
                 repository,
                 branch,
-                client_notify(c, repository, branch))
+                lambda sha: c.notify(repository, branch, sha))
 
     return (listener, clients.values())
 
@@ -52,12 +46,12 @@ def load_json_file(filename):
         return json.loads(f.read())
 
 def run(filename):
-    config = load_json_file(filename)
+    conf = config.Config(filename)
 
-    listener, clients = setup(config)
+    listener, clients = setup(conf)
 
     if os.fork() == 0:
-        chuser(config["user"])
+        chuser(conf.user())
         listener.run()
         sys.exit(-1)
 
@@ -70,4 +64,4 @@ def run(filename):
     for i in xrange(0, 1 + len(clients)):
         os.wait()
 
-run("/etc/pushycat/config.json")
+run(CONFIG_PATH)
