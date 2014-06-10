@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = purge ]; then
+	if ! getent passwd pushycat > /dev/null ; then
+    deluser --system pushycat || echo "Could not remove pushycat user."
+  fi
+
+	if ! getent group pushycat > /dev/null ; then
+    delgroup --system pushycat || echo "Could not remove pushycat group."
+  fi
+fi
