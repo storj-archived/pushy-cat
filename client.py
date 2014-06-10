@@ -21,7 +21,7 @@ class Client(object):
                 shell=True)
 
     def run(self):
+        print "running client with uid =", os.getuid()
         while True:
-            print os.getuid()
             line = self.reader.readline()
             self.notify(*string.rsplit(line,'/', 1))

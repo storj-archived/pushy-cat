@@ -5,6 +5,7 @@ import client
 import json
 import os
 import pwd
+import sys
 
 def client_notify(client, repo, branch):
     def f():
@@ -19,7 +20,7 @@ def setup(config):
     clients = {}
     listener = http.HttpListener(config["listen"])
 
-    for hook in hooks:
+    for hook in hooks["hooks"]:
         user       = hook["user"]
         repository = hook["repository"]
         branch     = hook["branch"]
@@ -41,8 +42,9 @@ def setup(config):
 def chuser(username):
     uid = pwd.getpwnam(username).pw_uid
 
-    os.setuid(uid)
-    os.setgid(uid)
+    if uid != 0:
+        os.setgid(uid)
+        os.setuid(uid)
 
 
 def load_json_file(filename):
@@ -57,13 +59,13 @@ def run(filename):
     if os.fork() == 0:
         chuser(config["user"])
         listener.run()
-        os.exit(-1)
+        sys.exit(-1)
 
     for client in clients:
         if os.fork() == 0:
             chuser(client.user)
             client.run()
-            os.exit(-1)
+            sys.exit(-1)
 
     for i in xrange(0, 1 + len(clients)):
         os.wait()

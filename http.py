@@ -34,4 +34,5 @@ class HttpListener(object):
             return flask.jsonify(status="ok")
 
     def run(self):
-        self.app.run(debug=True, host=self.host, port=self.port)
+        print "running http server"
+        self.app.run(host=self.host, port=self.port)
