@@ -7,9 +7,9 @@ import os
 import pwd
 import sys
 
-CONFIG_PATH = "/etc/pushycat/config.json"
-
 def setup(conf):
+    """Configure clients and http listener"""
+
     clients = {}
     listener = pushycat.http_listener.HttpListener(conf.listen(), conf.path())
 
@@ -27,12 +27,13 @@ def setup(conf):
         listener.add(
                 repository,
                 branch,
-                lambda sha: c.notify(repository, branch, sha))
+                lambda sha, c=c, r=repository, b=branch: c.notify(r, b, sha))
 
     return (listener, clients.values())
 
 
 def chuser(username):
+    """Change the uid/gid of the current process to that of given the username"""
     uid = pwd.getpwnam(username).pw_uid
 
     if uid != 0:
@@ -40,12 +41,10 @@ def chuser(username):
         os.setuid(uid)
 
 
-def load_json_file(filename):
-    with open(filename) as f:
-        return json.loads(f.read())
+def run():
+    """Launch webserver and clients, and wait forever"""
 
-def run(filename):
-    conf = pushycat.config.Config(filename)
+    conf = pushycat.config.Config()
 
     listener, clients = setup(conf)
 
@@ -63,4 +62,5 @@ def run(filename):
     for i in range(0, 1 + len(clients)):
         os.wait()
 
-run(CONFIG_PATH)
+if __name__ == "__main__":
+    run()

@@ -1,7 +1,6 @@
-import flask
-
 import sys
 import logging
+import flask
 
 class HttpListener(object):
     def __init__(self, listen, path):

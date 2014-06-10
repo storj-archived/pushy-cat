@@ -1,8 +1,9 @@
 import json
-import uuid
+
+CONFIG_PATH = "/etc/pushycat/config.json"
 
 class Config(object):
-    def __init__(self, path):
+    def __init__(self, path=CONFIG_PATH):
         self.config_path = path
         with open(path) as f:
             self.conf = json.loads(f.read())
@@ -26,6 +27,8 @@ class Config(object):
         return self.conf["scripts"]
 
     def add(self, url, branch, directory, user):
+        """Register webhook whose command is just a git update"""
+
         self._hooks.append({
             "user":       user,
             "repository": url,
