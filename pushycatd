@@ -8,7 +8,6 @@ import pwd
 import sys
 
 CONFIG_PATH = "/etc/pushycat/config.json"
-CONFIG_PATH = "config.json.example"
 
 def setup(conf):
     clients = {}

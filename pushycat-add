@@ -3,7 +3,6 @@ import pushycat.config
 import argparse
 
 CONFIG_PATH = "/etc/pushycat/config.json"
-CONFIG_PATH = "config.json.example"
 
 def main():
     parser = argparse.ArgumentParser(
