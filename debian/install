@@ -1,0 +1,7 @@
+pushycatd    usr/share/pushycatd
+pushycat-add usr/share/pushycatd
+pushycat     usr/share/pushycatd
+
+examples/create-or-update-git.sh etc/pushycat/scripts
+examples/debian/hooks.json       etc/pushycat
+examples/debian/config.json      etc/pushycat

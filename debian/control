@@ -1,0 +1,15 @@
+Source: pushycat
+Section: misc
+Priority: optional
+Maintainer: Hugo Peixoto <hugo.peixoto@gmail.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: http://github.com/storj/pushycat
+
+Package: pushycatd
+Architecture: all
+Depends: ${python:Depends}, ${misc:Depends}
+XB-Python-Version: ${python:Versions}
+Description: Github webhook listener
+ pushycatd is a webservice that listens for github webhooks
+ and executes arbitrary commands when triggered.
