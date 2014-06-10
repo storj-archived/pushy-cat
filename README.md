@@ -71,6 +71,17 @@ create-or-update-git.sh
 Due to this behaviour, it is recommended that you always create a wrapper
 script to avoid passing unwanted arguments to your executable.
 
+If you just wish to update a git directory whenever there's a push event, you can use
+the `pushycat-add` tool, instead of editing the hooks file by hand. The following command
+will add the json shown above:
+
+```
+pushycat-add https://github.com/Storj/storj.io /var/www/storj.io storj
+```
+
+This tool also supports two optional arguments: `--conf /path/to/conf` and
+`--branch branch-name`.
+
 
 #### GitHub webhook configuration
 
