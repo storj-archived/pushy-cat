@@ -1,9 +1,10 @@
 {
   "hooks": [
     {
+      "user":       "hugopeixoto",
       "repository": "bitcumulus",
       "branch":     "master",
-      "deploy":     "update-bitcumulus.sh"
+      "run":        "update-bitcumulus.sh"
     }
   ]
 }

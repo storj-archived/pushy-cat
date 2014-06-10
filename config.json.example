@@ -1,0 +1,5 @@
+{
+  "user": "hugopeixoto",
+  "listen": "0.0.0.0:8080",
+  "hooks": "/etc/pushycat/hooks.json"
+}

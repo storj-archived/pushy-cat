@@ -1,30 +1,71 @@
 #!/usr/bin/env python
 
-import flask
-import registry
+import http
+import client
+import json
+import os
+import pwd
 
-app = flask.Flask(__name__)
+def client_notify(client, repo, branch):
+    def f():
+        client.writer.write("{0}/{1}\n".format(repo, branch))
 
-def get_registry():
-    r = getattr(flask.g, '_registry', None)
-    if r is None:
-        r = flask.g._registry = registry.Registry("hooks.json")
-
-    return r
+    return f
 
 
-@app.route("/hook/<repo>", methods=['POST'])
-def hook(repo):
-    if flask.request.headers['X-GitHub-Event'] == 'ping':
-        return flask.jsonify(zen_level="super")
+def setup(config):
+    hooks = load_json_file(config["hooks"])
 
-    if flask.request.headers['X-GitHub-Event'] == 'push':
-        branch = flask.request.json["ref"].split("/")[-1]
-        sha    = flask.request.json["after"]
+    clients = {}
+    listener = http.HttpListener(config["listen"])
 
-        get_registry().notify(repo, branch, sha)
+    for hook in hooks:
+        user       = hook["user"]
+        repository = hook["repository"]
+        branch     = hook["branch"]
+        run        = hook["run"]
 
-        return flask.jsonify(status="ok")
+        c = clients.get(user, None)
+        if c is None:
+            c = clients[user] = client.Client(user, os.pipe())
 
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080)
+        c.add(repository, branch, run)
+        listener.add(
+                repository,
+                branch,
+                client_notify(c, repository, branch))
+
+    return (listener, clients.values())
+
+
+def chuser(username):
+    uid = pwd.getpwnam(username).pw_uid
+
+    os.setuid(uid)
+    os.setgid(uid)
+
+
+def load_json_file(filename):
+    with open(filename) as f:
+        return json.loads(f.read())
+
+def run(filename):
+    config = load_json_file(filename)
+
+    listener, clients = setup(config)
+
+    if os.fork() == 0:
+        chuser(config["user"])
+        listener.run()
+        os.exit(-1)
+
+    for client in clients:
+        if os.fork() == 0:
+            chuser(client.user)
+            client.run()
+            os.exit(-1)
+
+    for i in xrange(0, 1 + len(clients)):
+        os.wait()
+
+run("/etc/pushycat/config.json")
