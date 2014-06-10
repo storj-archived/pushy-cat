@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import config
-import http
+import http_listener
 import client
 import os
 import pwd
@@ -12,7 +12,7 @@ CONFIG_PATH = "config.json.example"
 
 def setup(conf):
     clients = {}
-    listener = http.HttpListener(conf.listen(), conf.path())
+    listener = http_listener.HttpListener(conf.listen(), conf.path())
 
     for hook in conf.hooks():
         user       = hook["user"]
@@ -61,7 +61,7 @@ def run(filename):
             client.run()
             sys.exit(-1)
 
-    for i in xrange(0, 1 + len(clients)):
+    for i in range(0, 1 + len(clients)):
         os.wait()
 
 run(CONFIG_PATH)

@@ -21,7 +21,7 @@ class Client(object):
         subprocess.call(command + [repository, branch, sha])
 
     def notify(self, repository, branch, sha):
-        print "notifying with uid =", os.getuid()
+        print("notifying with uid =", os.getuid())
 
         self.writer.write(json.dumps({
             "repository": repository,
@@ -31,12 +31,12 @@ class Client(object):
         self.writer.flush()
 
     def run(self):
-        print "running client uid({0})".format(os.getuid())
+        print("running client uid({0})".format(os.getuid()))
 
         while True:
             payload = json.loads(self.reader.readline())
 
-            print "notified with uid({0}): {1}".format(os.getuid(), payload)
+            print("notified with uid({0}): {1}".format(os.getuid(), payload))
             self.execute(
                     payload["repository"],
                     payload["branch"],

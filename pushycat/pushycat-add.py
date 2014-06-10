@@ -19,8 +19,8 @@ def main():
 
     conf.add(options.url, options.branch, options.directory, options.user)
 
-    print "webhook succesfully added."
-    print "Please restart pushycat (service pushycat restart)"
+    print("webhook succesfully added.")
+    print("Please restart pushycat (service pushycat restart)")
 
 if __name__ == "__main__":
     main()

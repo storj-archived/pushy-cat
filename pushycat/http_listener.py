@@ -1,12 +1,11 @@
 import flask
-import string
 
 import sys
 import logging
 
 class HttpListener(object):
     def __init__(self, listen, path):
-        self.host, self.port = string.split(listen, ":")
+        self.host, self.port = listen.split(":")
         self.port = int(self.port)
 
         self.app = flask.Flask("pushycat")
@@ -42,6 +41,6 @@ class HttpListener(object):
             return flask.jsonify(status="ok")
 
     def run(self):
-        print "running http server"
+        print("running http server")
         self.set_logging()
         self.app.run(host=self.host, port=self.port)
