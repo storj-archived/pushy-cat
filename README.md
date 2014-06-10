@@ -1,58 +1,81 @@
-pushy-cat
+pushycat
 =========
 
 Listens to Github webhooks and executes scripts accordingly.
 
 Use case: automatically update static websites.
 
-#### Installation
+## Installation
+
+If you're running ubuntu, the preferred method of installation is through a deb
+package.
+
+If you cannot or do not want to install pushycat through a deb package, clone
+this repository, install the required eggs (`pip install -r requirements.txt`),
+set up the configuration files, and run the daemon:
+
+```
+pushycatd --conf /path/to/config.json
+```
+
+If you wish to run hook scripts with multiple users, pushycatd must be ran as
+root, so that it can create child processes with different users.
+
+
+### Configuration
+
+The main configuration file lives, by default, in `/etc/pushycat/config.json`.
+You can see an example in `examples/debian/config.json`. It supports the following settings:
+
+- user - username that should run the http server
+- listen - listen address, in "host:port" format, for the http server
+- path - http path where the webhooks are to be sent
+- hooks - file path for the hook definition file
+- scripts - file path for the default scripts directory
+
+The user setting can only be different from the user running `pushycatd` if it
+is running as root. The last setting is only required if you wish to use the
+`pushycat-add` helper. It requires that a file called `create-or-update-git.sh`
+exists in that directory.
+
+
+#### Hooks configuration
 
 Create a hooks.json similar to the provided hooks.example.json. For example, if
 you want to track the master branch on a repository, so that it automatically
 pulls a local copy, you would set it up like so:
 
 ```json
-{
-  "hooks":[
-    {
-      "repository": "repository-name",
-      "branch":     "master",
-      "deploy":     "/path/to/script.sh"
-    }
-  ]
-}
+[
+  {
+    "user":       "storj",
+    "repository": "https://github.com/Storj/storj.io",
+    "branch":     "master",
+    "run":        ["/path/to/create-or-update-git.sh", "/var/www/storj.io"]
+  }
+]
 ```
 
-/path/to/script.sh would contain `cd /path/to/local/repo; git pull` (be sure to
-mark it as executable, with chmod +x /path/to/local/repo).
+Three extra arguments will be appended to the executable whenever it is called:
+repository url, branch name, and the most recent commit hash. In the example
+above, `create-or-update-git.sh` would be called with four arguments:
 
-Then, set up a gunicorn webserver pointing to pushycat:app and add a git
-webhook pointing to your-domain.com/repository-name.
-
-##### Example setup commands
-
-```bash
-git clone https://github.com/Storj/pushy-cat.git
-cd pushy-cat
-virtualenv .env --prompt [pushycat]
-source .env/bin/activate
-pip install -r requirements.txt
+```
+create-or-update-git.sh
+    "/var/www/storj.io"
+    "https://github.Storj/storj.io"
+    "master"
+    "b8e38b7b05e5fe3130ee788c211020bc5af2415b"
 ```
 
-You still need to configure hooks.json and any scripts to execute.
+Due to this behaviour, it is recommended that you always create a wrapper
+script to avoid passing unwanted arguments to your executable.
 
-#### Gunicorn+supervisord setup
 
-If you have supervisord installed, you can use it to automatically run
-pushycat as a gunicorn daemon, using the following config file:
+#### GitHub webhook configuration
 
-```ini
-[program:pushycat]
-command=/home/pushycat/pushy-cat/.env/bin/gunicorn -w 2 -b 127.0.0.1:5100 pushycat:app
-directory=/home/pushycat/pushy-cat
-user=pushycat
+Add an url in the form `http://host:portpath` to your github project, according to
+the settings in `/etc/pushycat/config.json`.
 
-autostart=true
-autorestart=true
-redirect_stderr=true
-```
+For example, if you set the listen setting to `0.0.0.0:8080` and path to `/webhook/`,
+the url should be something like `http://your-ip:8080/webhook/`.
