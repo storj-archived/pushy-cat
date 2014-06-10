@@ -1,8 +1,20 @@
 [
   {
-    "branch": "master",
-    "repository": "https://github.com/storj/storj.io",
-    "run": ["examples/create-or-update-git.sh", "../pushycat"],
+    "run": [
+      "examples/create-or-update-git.sh", 
+      "../pushycat"
+    ], 
+    "repository": "https://github.com/storj/storj.io", 
+    "branch": "master", 
     "user": "hugopeixoto"
+  }, 
+  {
+    "run": [
+      "examples//create-or-update-git.sh", 
+      "../pushycat"
+    ], 
+    "user": "hugopeixoto", 
+    "repository": "https://github.com/storj/storj.io", 
+    "branch": "master"
   }
 ]

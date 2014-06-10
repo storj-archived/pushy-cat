@@ -1,4 +1,5 @@
-import config
+#!/usr/bin/env python
+import pushycat.config
 import argparse
 
 CONFIG_PATH = "/etc/pushycat/config.json"
@@ -15,7 +16,7 @@ def main():
 
     options = parser.parse_args()
 
-    conf = config.Config(CONFIG_PATH)
+    conf = pushycat.config.Config(CONFIG_PATH)
 
     conf.add(options.url, options.branch, options.directory, options.user)
 

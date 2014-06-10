@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import config
-import http_listener
-import client
+import pushycat.config
+import pushycat.http_listener
+import pushycat.client
 import os
 import pwd
 import sys
@@ -12,7 +12,7 @@ CONFIG_PATH = "config.json.example"
 
 def setup(conf):
     clients = {}
-    listener = http_listener.HttpListener(conf.listen(), conf.path())
+    listener = pushycat.http_listener.HttpListener(conf.listen(), conf.path())
 
     for hook in conf.hooks():
         user       = hook["user"]
@@ -22,7 +22,7 @@ def setup(conf):
 
         c = clients.get(user, None)
         if c is None:
-            c = clients[user] = client.Client(user, os.pipe())
+            c = clients[user] = pushycat.client.Client(user, os.pipe())
 
         c.add(repository, branch, run)
         listener.add(
@@ -46,7 +46,7 @@ def load_json_file(filename):
         return json.loads(f.read())
 
 def run(filename):
-    conf = config.Config(filename)
+    conf = pushycat.config.Config(filename)
 
     listener, clients = setup(conf)
 
