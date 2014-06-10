@@ -10,6 +10,6 @@ Package: pushycatd
 Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}, python-flask
 XB-Python-Version: ${python:Versions}
-Description: Github webhook listener
+Description: Github webhook processing daemon
  pushycatd is a webservice that listens for github webhooks
  and executes arbitrary commands when triggered.

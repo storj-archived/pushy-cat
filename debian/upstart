@@ -1,0 +1,13 @@
+# pushycat - github webhook processing daemon
+#
+# pushycatd is a webservice that listens for github webhooks
+# and executes arbitrary commands when triggered.
+
+description     "github webhook processing daemon"
+
+start on (started networking)
+stop on runlevel [!2345]
+
+respawn
+
+exec pushycatd
