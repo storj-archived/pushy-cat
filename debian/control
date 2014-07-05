@@ -2,14 +2,13 @@ Source: pushycat
 Section: misc
 Priority: optional
 Maintainer: Hugo Peixoto <hugo.peixoto@gmail.com>
-Build-Depends: debhelper (>= 8.0.0)
+Build-Depends: debhelper (>= 8.0.0), dh-python
 Standards-Version: 3.9.4
 Homepage: http://github.com/storj/pushycat
 
 Package: pushycatd
 Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}, python-flask
-XB-Python-Version: ${python:Versions}
 Description: Github webhook processing daemon
  pushycatd is a webservice that listens for github webhooks
  and executes arbitrary commands when triggered.
