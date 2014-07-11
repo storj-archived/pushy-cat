@@ -1,3 +1,9 @@
+pushycat (1.1) testing; urgency=medium
+
+  * Changes behaviour when adding multiple hooks for the same repository
+
+ -- Hugo Peixoto <hugo.peixoto@gmail.com>  Sat, 12 Jul 2014 00:56:55 +0100
+
 pushycat (1.0) testing; urgency=medium
 
   * Initial release.

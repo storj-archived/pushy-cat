@@ -29,6 +29,12 @@ class Config(object):
     def add(self, url, branch, directory, user):
         """Register webhook whose command is just a git update"""
 
+        # Removes any hook for the same repository/user/branch.
+        self._hooks = [
+                hook
+                for hook in self._hooks
+                if not matches(hook, url, branch, user)]
+
         self._hooks.append({
             "user":       user,
             "repository": url,
@@ -38,6 +44,10 @@ class Config(object):
 
         self.serialize()
 
+
     def serialize(self):
         with open(self.conf["hooks"], "w") as f:
             f.write(json.dumps(self._hooks, indent=2))
+
+def matches(hook, url, branch, user):
+    return hook["user"] == user and hook["repository"] == url and hook["branch"] == branch
