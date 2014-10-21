@@ -1,13 +1,13 @@
 pushycat
 =========
 
-Listens to Github webhooks and executes scripts accordingly.
+Listens to GitHub webhooks and executes scripts accordingly.
 
 Use case: automatically update static websites.
 
 ## Installation
 
-If you're running ubuntu, the preferred method of installation is through a deb
+If you're running Ubuntu, the preferred method of installation is through a deb
 package.
 
 If you cannot or do not want to install pushycat through a deb package, clone
@@ -18,7 +18,7 @@ set up the configuration files, and run the daemon:
 pushycatd --conf /path/to/config.json
 ```
 
-If you wish to run hook scripts with multiple users, pushycatd must be ran as
+If you wish to run hook scripts with multiple users, pushycatd must be run as
 root, so that it can create child processes with different users.
 
 
@@ -85,7 +85,7 @@ This tool also supports two optional arguments: `--conf /path/to/conf` and
 
 #### GitHub webhook configuration
 
-Add an url in the form `http://host:portpath` to your github project, according to
+Add an url in the form `http://host:portpath` to your GitHub project, according to
 the settings in `/etc/pushycat/config.json`.
 
 For example, if you set the listen setting to `0.0.0.0:8080` and path to `/webhook/`,
