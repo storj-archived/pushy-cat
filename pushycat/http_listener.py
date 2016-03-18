@@ -20,6 +20,7 @@ class HttpListener(object):
 
 
     def add(self, repository, branch, fn):
+        print "Adding event key: %s/%s" % (repository, branch)
         self.events[repository + "/" + branch] = fn
 
 
