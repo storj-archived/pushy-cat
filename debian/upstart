@@ -8,6 +8,17 @@ description     "github webhook processing daemon"
 start on (started networking)
 stop on runlevel [!2345]
 
-respawn
+setuid metadisk
+setgid metadisk
 
-exec pushycatd
+env NVM_INIT=/opt/metadisk/.nvm/nvm.sh
+env CONFIG=/etc/pushycat/config.json
+env LOG_DIR=/var/log/pushycat
+env LOG_FILE=pushycat.log
+
+script
+  exec bash -c "source $NVM_INIT && exec pushycatd --conf $CONFIG >> $LOG_DIR/$LOG_FILE 2>&1"
+end script
+
+start on startup
+respawn
