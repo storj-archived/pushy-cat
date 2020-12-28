@@ -5,7 +5,7 @@
       "../pushycat"
     ], 
     "repository": "https://github.com/storj/storj.io", 
-    "branch": "master", 
+    "branch": "main", 
     "user": "hugopeixoto"
   }, 
   {
@@ -15,6 +15,6 @@
     ], 
     "user": "hugopeixoto", 
     "repository": "https://github.com/storj/storj.io", 
-    "branch": "master"
+    "branch": "main"
   }
 ]

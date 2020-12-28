@@ -9,7 +9,7 @@ if [ -d "$DIRECTORY/.git" ]; then
     mkdir -p "$DIRECTORY"
     cd "$DIRECTORY"
     git fetch origin
-    git reset --hard origin/master
+    git reset --hard origin/main
 else
     git clone "$URL" "$DIRECTORY"
 fi

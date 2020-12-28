@@ -20,7 +20,7 @@ def main():
     parser.add_argument('url')
     parser.add_argument('directory')
     parser.add_argument('user')
-    parser.add_argument('--branch', default='master')
+    parser.add_argument('--branch', default='main')
     parser.add_argument('--conf', default=pushycat.config.CONFIG_PATH)
 
     options = parser.parse_args()

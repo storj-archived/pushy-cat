@@ -42,7 +42,7 @@ exists in that directory.
 #### Hooks configuration
 
 Create a hooks.json similar to the provided hooks.example.json. For example, if
-you want to track the master branch on a repository, so that it automatically
+you want to track the main branch on a repository, so that it automatically
 pulls a local copy, you would set it up like so:
 
 ```json
@@ -50,7 +50,7 @@ pulls a local copy, you would set it up like so:
   {
     "user":       "storj",
     "repository": "https://github.com/Storj/storj.io",
-    "branch":     "master",
+    "branch":     "main",
     "run":        ["/path/to/create-or-update-git.sh", "/var/www/storj.io"]
   }
 ]
@@ -64,7 +64,7 @@ above, `create-or-update-git.sh` would be called with four arguments:
 create-or-update-git.sh
     "/var/www/storj.io"
     "https://github.Storj/storj.io"
-    "master"
+    "main"
     "b8e38b7b05e5fe3130ee788c211020bc5af2415b"
 ```
 
